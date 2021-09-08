@@ -50,9 +50,10 @@ public class CategoriaRepositorio implements Repositorio<Categoria> {
 	@Override
 	public Categoria guardar(Categoria t) throws SQLException {
 
-		String sql;
+		String sql = null;
+		
 		if (t.getId() != null && t.getId() > 0) {
-			sql = "UPDATE categorias SET nombre=? where id=?";
+			sql = "UPDATE categorias SET nombre=? WHERE id=?";
 		} else {
 			sql = "INSERT INTO categorias (nombre) VALUES(?)";
 		}
@@ -67,7 +68,7 @@ public class CategoriaRepositorio implements Repositorio<Categoria> {
 			stmt.executeUpdate();
 
 			//
-			if (t.getId() != null) {
+			if (t.getId() == null) {
 				try (ResultSet resultSet = stmt.getGeneratedKeys()) {
 					if (resultSet.next()) {
 						t.setId(resultSet.getLong(1));
