@@ -16,7 +16,7 @@ import com.potoware.java.jdbc.util.ConexionBaseDatos;
 public class ProductoRepositorio implements Repositorio<Producto>{
 
 	private Connection getConnection() throws SQLException {
-		return ConexionBaseDatos.getInstance();
+		return ConexionBaseDatos.getConnection();
 	}
 	@Override
 	public List<Producto> listar()  {

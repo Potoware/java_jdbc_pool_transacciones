@@ -26,12 +26,12 @@ public static void main(String[] args) {
 		System.out.println("==============Insertar Producto==================");
 		Producto producto = new Producto();
 		
-		producto.setNombre("Balon Futbol Xt780");
-		producto.setPrecio(70000);
+		producto.setNombre("Parlantes Logitech Z1000");
+		producto.setPrecio(1000000);
 		producto.setFechaRegistro(new Date());
 		
 		Categoria categoria = new Categoria();
-		categoria.setId(1L);
+		categoria.setId(2L);
 		
 		producto.setCategoria(categoria);
 		
