@@ -14,16 +14,15 @@ import com.potoware.java.jdbc.models.Producto;
 import com.potoware.java.jdbc.util.ConexionBaseDatos;
 
 public class ProductoRepositorio implements Repositorio<Producto>{
+	
+	private Connection conn;
 
-	private Connection getConnection() throws SQLException {
-		return ConexionBaseDatos.getConnection();
-	}
+
 	@Override
-	public List<Producto> listar()  {
+	public List<Producto> listar() throws SQLException  {
 		List<Producto> productos= new ArrayList<>();
 		
-		try (Connection conn= getConnection();
-				Statement stmt = conn.createStatement();
+		try (Statement stmt = conn.createStatement();
 				ResultSet resultSet = stmt.executeQuery("SELECT p.*,c.nombre as categoria FROM PRODUCTOS as p inner join categorias as c ON (p.categoria_id = c.id);");){
 			
 			while(resultSet.next()) {
@@ -32,21 +31,17 @@ public class ProductoRepositorio implements Repositorio<Producto>{
 				productos.add(p);
 			}
 			
-		} catch (SQLException e) {
-
-			e.printStackTrace();
-		}
+		} 
 		
 		return productos;
 	}
 	
 	
 	@Override
-	public Producto porId(Long id) {
+	public Producto porId(Long id) throws SQLException {
 		Producto producto = null;
 		
-		try(Connection conn= getConnection();
-				PreparedStatement stmt = conn.prepareStatement("SELECT p.*,c.nombre as categoria FROM PRODUCTOS as p inner join categorias as c ON (p.categoria_id = c.id) WHERE p.id = ?");)
+		try(PreparedStatement stmt = conn.prepareStatement("SELECT p.*,c.nombre as categoria FROM PRODUCTOS as p inner join categorias as c ON (p.categoria_id = c.id) WHERE p.id = ?");)
 		{
 			stmt.setLong(1, id);
 			ResultSet rs = stmt.executeQuery();
@@ -55,53 +50,57 @@ public class ProductoRepositorio implements Repositorio<Producto>{
 				producto = crearProducto(rs);
 			}
 			rs.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		} 
 		
 		return producto;
 	}
 	@Override
-	public void guardar(Producto t) {
+	public Producto guardar(Producto t) throws SQLException {
 		
 		String sql;
 		if (t.getId() != null && t.getId()>0) {
-			sql = "UPDATE productos SET nombre=?,precio=?,categoria_id=? where id=?";
+			sql = "UPDATE productos SET nombre=?,precio=?,categoria_id=?,sku=? where id=?";
 		}
 		else {
-			sql = "INSERT INTO productos (nombre,precio,categoria_id, fecha_registro) VALUES(?,?,?,?)";
+			sql = "INSERT INTO productos (nombre,precio,categoria_id,sku, fecha_registro) VALUES(?,?,?,?,?)";
 		}
-		try(Connection conn= getConnection();
-				PreparedStatement stmt = conn.prepareStatement(sql)){
+		try(PreparedStatement stmt = conn.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS)){
 			
 			stmt.setString(1,t.getNombre());
 			stmt.setLong(2,t.getPrecio());
 			stmt.setLong(3, t.getCategoria().getId());
+			stmt.setString(4,t.getSku());
+			
 			if (t.getId() != null && t.getId()>0) {
-				stmt.setLong(4, t.getId());
+				stmt.setLong(5, t.getId());
 			}
 		else {
-			stmt.setDate(4, new Date(t.getFechaRegistro().getTime()));
+			stmt.setDate(5, new Date(t.getFechaRegistro().getTime()));
 		}
 			stmt.executeUpdate();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+			
+			//
+			if (t.getId() != null) {
+				try(ResultSet resultSet = stmt.getGeneratedKeys()){
+					if(resultSet.next()) {
+						t.setId(resultSet.getLong(1));
+					}
+				}
+			}
+			else {}
+			//
+			
+		} 
 		
+		return t;
 	}
 	@Override
-	public void eliminar(Long id) {
+	public void eliminar(Long id) throws SQLException {
 		
-		try(Connection conn= getConnection();
-				PreparedStatement stmt = conn.prepareStatement("DELETE FROM productos WHERE id=?")){
+		try(PreparedStatement stmt = conn.prepareStatement("DELETE FROM productos WHERE id=?")){
 			stmt.setLong(1, id);
 			stmt.executeUpdate();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		} 
 		
 	}
 	
@@ -110,6 +109,7 @@ public class ProductoRepositorio implements Repositorio<Producto>{
 		Categoria c = new Categoria();
 		p.setId(resultSet.getLong("id"));
 		p.setNombre(resultSet.getString("nombre"));
+		p.setSku(resultSet.getString("sku"));
 		
 		p.setPrecio(resultSet.getInt("precio"));
 		p.setFechaRegistro(resultSet.getDate("fecha_registro"));
