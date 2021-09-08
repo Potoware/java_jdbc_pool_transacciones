@@ -17,6 +17,12 @@ public class ProductoRepositorio implements Repositorio<Producto>{
 	
 	private Connection conn;
 
+	
+
+	public ProductoRepositorio(Connection conn) {
+		this.conn = conn;
+	}
+
 
 	@Override
 	public List<Producto> listar() throws SQLException  {
