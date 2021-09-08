@@ -22,7 +22,8 @@ public class ProductoRepositorio implements Repositorio<Producto>{
 	public List<Producto> listar()  {
 		List<Producto> productos= new ArrayList<>();
 		
-		try (Statement stmt = getConnection().createStatement();
+		try (Connection conn= getConnection();
+				Statement stmt = conn.createStatement();
 				ResultSet resultSet = stmt.executeQuery("SELECT p.*,c.nombre as categoria FROM PRODUCTOS as p inner join categorias as c ON (p.categoria_id = c.id);");){
 			
 			while(resultSet.next()) {
@@ -44,7 +45,8 @@ public class ProductoRepositorio implements Repositorio<Producto>{
 	public Producto porId(Long id) {
 		Producto producto = null;
 		
-		try(PreparedStatement stmt = getConnection().prepareStatement("SELECT p.*,c.nombre as categoria FROM PRODUCTOS as p inner join categorias as c ON (p.categoria_id = c.id) WHERE p.id = ?");)
+		try(Connection conn= getConnection();
+				PreparedStatement stmt = conn.prepareStatement("SELECT p.*,c.nombre as categoria FROM PRODUCTOS as p inner join categorias as c ON (p.categoria_id = c.id) WHERE p.id = ?");)
 		{
 			stmt.setLong(1, id);
 			ResultSet rs = stmt.executeQuery();
@@ -70,7 +72,8 @@ public class ProductoRepositorio implements Repositorio<Producto>{
 		else {
 			sql = "INSERT INTO productos (nombre,precio,categoria_id, fecha_registro) VALUES(?,?,?,?)";
 		}
-		try(PreparedStatement stmt = getConnection().prepareStatement(sql)){
+		try(Connection conn= getConnection();
+				PreparedStatement stmt = conn.prepareStatement(sql)){
 			
 			stmt.setString(1,t.getNombre());
 			stmt.setLong(2,t.getPrecio());
@@ -91,7 +94,8 @@ public class ProductoRepositorio implements Repositorio<Producto>{
 	@Override
 	public void eliminar(Long id) {
 		
-		try(PreparedStatement stmt = getConnection().prepareStatement("DELETE FROM productos WHERE id=?")){
+		try(Connection conn= getConnection();
+				PreparedStatement stmt = conn.prepareStatement("DELETE FROM productos WHERE id=?")){
 			stmt.setLong(1, id);
 			stmt.executeUpdate();
 		} catch (SQLException e) {

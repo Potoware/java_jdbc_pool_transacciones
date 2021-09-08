@@ -15,7 +15,7 @@ import com.potoware.java.jdbc.util.ConexionBaseDatos;
 public class EjemploJdbcUpdate {
 public static void main(String[] args) {
 		
-	try (Connection conn = ConexionBaseDatos.getInstance();){
+
 		
 		Repositorio<Producto> repo = new ProductoRepositorio();
 		System.out.println("==============Listar==================");
@@ -39,11 +39,6 @@ public static void main(String[] args) {
 		repo.listar().forEach(System.out::println);
 		
 		
-				
-	} catch (SQLException e) {
-		e.printStackTrace();
-	} finally {
 	
-	}
 }
 }

@@ -15,7 +15,7 @@ import com.potoware.java.jdbc.util.ConexionBaseDatos;
 public class EjemploJdbc {
 public static void main(String[] args) {
 		
-	try (Connection conn = ConexionBaseDatos.getInstance();){
+	
 		
 		Repositorio<Producto> repo = new ProductoRepositorio();
 		System.out.println("==============Listar==================");
@@ -26,12 +26,12 @@ public static void main(String[] args) {
 		System.out.println("==============Insertar Producto==================");
 		Producto producto = new Producto();
 		
-		producto.setNombre("Colchon Doble");
-		producto.setPrecio(1150000);
+		producto.setNombre("Balon Futbol Xt780");
+		producto.setPrecio(70000);
 		producto.setFechaRegistro(new Date());
 		
 		Categoria categoria = new Categoria();
-		categoria.setId(3L);
+		categoria.setId(1L);
 		
 		producto.setCategoria(categoria);
 		
@@ -41,11 +41,6 @@ public static void main(String[] args) {
 		repo.listar().forEach(System.out::println);
 		
 		
-				
-	} catch (SQLException e) {
-		e.printStackTrace();
-	} finally {
 	
-	}
 }
 }

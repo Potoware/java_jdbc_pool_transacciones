@@ -14,7 +14,6 @@ import com.potoware.java.jdbc.util.ConexionBaseDatos;
 public class EjemploJdbcDelete {
 public static void main(String[] args) {
 		
-	try (Connection conn = ConexionBaseDatos.getInstance();){
 		
 		Repositorio<Producto> repo = new ProductoRepositorio();
 		System.out.println("==============Listar==================");
@@ -35,10 +34,6 @@ public static void main(String[] args) {
 		
 		
 				
-	} catch (SQLException e) {
-		e.printStackTrace();
-	} finally {
-	
-	}
+
 }
 }
