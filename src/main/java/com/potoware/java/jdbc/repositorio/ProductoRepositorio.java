@@ -11,7 +11,6 @@ import java.util.List;
 
 import com.potoware.java.jdbc.models.Categoria;
 import com.potoware.java.jdbc.models.Producto;
-import com.potoware.java.jdbc.util.ConexionBaseDatos;
 
 public class ProductoRepositorio implements Repositorio<Producto>{
 	

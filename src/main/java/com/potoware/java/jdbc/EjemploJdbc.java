@@ -1,19 +1,12 @@
 package com.potoware.java.jdbc;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Date;
 
 import com.potoware.java.jdbc.models.Categoria;
 import com.potoware.java.jdbc.models.Producto;
-import com.potoware.java.jdbc.repositorio.CategoriaRepositorio;
-import com.potoware.java.jdbc.repositorio.ProductoRepositorio;
-import com.potoware.java.jdbc.repositorio.Repositorio;
 import com.potoware.java.jdbc.service.CatalogoServicio;
 import com.potoware.java.jdbc.service.Service;
-import com.potoware.java.jdbc.util.ConexionBaseDatos;
 
 public class EjemploJdbc {
 public static void main(String[] args) throws SQLException {
