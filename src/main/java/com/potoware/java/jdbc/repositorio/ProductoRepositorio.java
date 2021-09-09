@@ -19,7 +19,18 @@ public class ProductoRepositorio implements Repositorio<Producto>{
 
 	
 
+	public ProductoRepositorio() {
+		
+	}
+
+
 	public ProductoRepositorio(Connection conn) {
+		this.conn = conn;
+	}
+
+	
+
+	public void setConn(Connection conn) {
 		this.conn = conn;
 	}
 

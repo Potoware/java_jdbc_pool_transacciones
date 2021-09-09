@@ -16,8 +16,20 @@ import com.potoware.java.jdbc.models.Categoria;
 public class CategoriaRepositorio implements Repositorio<Categoria> {
 
 	private Connection conn;
+	
+	
+
+	public CategoriaRepositorio() {
+	
+	}
 
 	public CategoriaRepositorio(Connection conn) {
+		this.conn = conn;
+	}
+	
+	
+
+	public void setConn(Connection conn) {
 		this.conn = conn;
 	}
 
