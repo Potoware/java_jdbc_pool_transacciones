@@ -159,6 +159,8 @@ public class CatalogoServicio implements Service{
 			}
 			try {
 				Categoria nuevaCategoria = categoriaRepositorio.guardar(categoria);
+				producto.setCategoria(nuevaCategoria);
+				productoRepositorio.guardar(producto);
 				
 				conn.commit();
 			}
